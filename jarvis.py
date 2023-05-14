@@ -5,7 +5,10 @@ import wikipedia
 import webbrowser
 import os
 import smtplib
+from AppOpener import open
+import subprocess
 
+local_path = 'C:\\Users\\vyomt'
 
 # an intallation to take in voices
 engine = pyttsx3.init('sapi5')
@@ -60,55 +63,64 @@ def sendEmail(to, content):
 if __name__ == "__main__":
     wishMe()
   
-    if 1:
+    while True:
         query = takeCommand().lower() #Converting user query into lower case
 
+        # WIKIPEDIA
+        
         # Logic for executing tasks based on query
-        if 'wikipedia' in query:  #if wikipedia found in the query then this block will be executed
+        if query.startswith('wikipedia'):  #if wikipedia found in the query then this block will be executed
             speak('Searching Wikipedia...')
             query = query.replace("wikipedia", "")
-            results = wikipedia.summary(query, sentences=1) 
+            results = wikipedia.summary(query, sentences=5) 
             speak("According to Wikipedia")
             print(results)
             speak(results)
             
+        # SEARCH GOOGLE        
+                
+        elif  query.startswith("google"):
+                webbrowser.open(f"www.google.com/search?q={query.replace('google', '')}")
+        
+        # OPEN ANY INSTALLED APP 
+             
+        elif  query.startswith("open app"):
+                open(query.replace('open app', '').upper())
+        
+        # OPEN ANY FOLDER
+        
+        elif  query.startswith("open folder"):
+            subprocess.Popen(f'explorer /root,"search-ms:query={query.replace("open folder", "")}&crumb=folder:{local_path}&"')
+            
+        # OPEN YOUTUBE
+            
         elif 'open youtube' in query:
             webbrowser.open("youtube.com")
-            
-            
-        elif 'open google' in query:
-                webbrowser.open("google.com")
-                
+        
+        # OPEN STACKOVERFLOW    
+              
         elif 'open stackoverflow' in query:
                 webbrowser.open("stackoverflow.com")
                 
-                
+        # PLAY MUSIC
+        
         elif 'play music' in query:
                 webbrowser.open("https://open.spotify.com/playlist/7DYwD8wnBFnvXBsVP0NEtM")
-                 
+                
+        # CURRENT TIME
+               
         elif 'the time' in query:
-                strTime = datetime.datetime.now().strftime("%H:%M:%S")    
+                strTime = datetime.datetime.now().strftime("%H:%M")    
                 speak(f"Sir, the time is {strTime}")
-            
-        elif 'open vs code' in query:
-                codepath = "C:\\Users\\vyomt\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-                os.startfile(codepath)
-                
-        elif 'open vs code' in query:
-                codepath = "C:\\Users\\vyomt\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-                os.startfile(codepath)
-                
-        elif 'email to vyom' in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                to = "vyomyourEmail@gmail.com"    
-                sendEmail(to, content)
-                speak("Email has been sent!")
-            except Exception as e:
-                print(e)
-                speak("Sorry Sir. I am not able to send this email")    
+  
 
+
+        
+       
+                
+        
+                
+        
             
             
       
